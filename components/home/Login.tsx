@@ -2,19 +2,31 @@ import { FormEvent } from 'react';
 import { ChevronRightIcon } from '@heroicons/react/outline';
 
 import TextField from '@/components/TextField';
-import useForm from '@/hooks/useForm';
+import useForm from '@/hooks/form';
+import { logIn } from '@/utils/http';
 
-interface LoginForm {
-  email: string;
-  password: string;
-}
+import { LoginForm } from '@/types/forms';
+import { LogInResponse } from '@/types/responses';
 
 const Login = () => {
   const [form, handleChange] = useForm<LoginForm>({ email: '', password: '' });
 
   const handleSubmit = (e: FormEvent) => {
     if (e) e.preventDefault();
-    console.log('Form submitted:', form);
+    logIn(form)
+      .then(async (res: Response) => {
+        if (res.status === 200) {
+          const data: LogInResponse = await res.json();
+          const token = data.accessToken;
+          localStorage.setItem('accessToken', token);
+          window.location.reload();
+        } else {
+          alert('Invalid login details');
+        }
+      })
+      .catch((error: Error) => {
+        alert('Unknown error');
+      });
     return false;
   };
 
@@ -39,8 +51,8 @@ const Login = () => {
           value={form.password}
           onChange={handleChange}
           required={true}
-          pattern={/^.{6,}/}
-          validationMessage="Password should atleast have 6 characters."
+          pattern={/^.{4,}/}
+          validationMessage="Password should atleast have 4 characters."
         />
         <button className="flex items-center justify-center h-12 space-x-2 bg-white border-2 border-gray-200 rounded-md text-orange-500 font-bold shadow-sm transition focus:outline-none focus:border-orange-500 hover:border-orange-200">
           <span>Login</span>
@@ -52,3 +64,4 @@ const Login = () => {
 };
 
 export default Login;
+export type { LoginForm };

@@ -59,6 +59,7 @@ const TextField = ({
         required={required ?? false}
         title={validationMessage}
         pattern={pattern ? parsePattern(pattern) : undefined}
+        autoComplete={type && type === 'password' ? 'on' : 'off'}
       />
       {!valid && <p className="text-sm text-red-500">{validationMessage}</p>}
     </div>

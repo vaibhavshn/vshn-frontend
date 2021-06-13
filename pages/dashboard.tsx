@@ -1,10 +1,9 @@
+import { logOut } from '@/utils/auth';
 import Head from 'next/head';
 import { useEffect } from 'react';
 
 export default function Dashboard() {
-  useEffect(() => {
-    window.location.href = '/';
-  }, []);
+  useEffect(() => {}, []);
 
   return (
     <div>
@@ -12,6 +11,13 @@ export default function Dashboard() {
         <title>Dashboard - vshn.in</title>
       </Head>
       <div>Dashboard</div>
+      <button
+        onClick={(_) => {
+          logOut();
+        }}
+      >
+        Log Out
+      </button>
     </div>
   );
 }

@@ -2,13 +2,11 @@ import { FormEvent } from 'react';
 import { ChevronRightIcon } from '@heroicons/react/outline';
 
 import TextField from '@/components/TextField';
-import useForm from '@/hooks/useForm';
+import useForm from '@/hooks/form';
 
-interface RegisterForm {
-  name: string;
-  email: string;
-  password: string;
-}
+import { RegisterForm } from '@/types/forms';
+import { register } from '@/utils/http';
+import { RegisterResponse } from '@/types/responses';
 
 const Register = () => {
   const [form, handleChange] = useForm<RegisterForm>({
@@ -19,7 +17,18 @@ const Register = () => {
 
   const handleSubmit = (e: FormEvent) => {
     if (e) e.preventDefault();
-    console.log('Form submitted:', form);
+    register(form).then(async (res: Response) => {
+      if (res.status === 200) {
+        const data: RegisterResponse = await res.json();
+        const token: string = data.accessToken;
+        localStorage.setItem('accessToken', token);
+        window.location.reload();
+      } else if (res.status === 409) {
+        alert('The email address is already in use.');
+      } else {
+        alert('Unknown error');
+      }
+    });
     return false;
   };
 
@@ -51,8 +60,8 @@ const Register = () => {
           value={form.password}
           onChange={handleChange}
           required={true}
-          pattern={/^.{6,}/}
-          validationMessage="Password should atleast have 6 characters."
+          pattern={/^.{4,}/}
+          validationMessage="Password should atleast have 4 characters."
         />
         <button className="flex items-center justify-center h-12 space-x-2 bg-white border-2 border-gray-200 rounded-md text-orange-500 font-bold shadow-sm transition focus:outline-none focus:border-orange-500 hover:border-orange-200">
           <span>Register</span>

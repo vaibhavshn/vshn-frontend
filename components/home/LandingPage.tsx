@@ -15,7 +15,7 @@ const LandingPage = () => {
           <h1 className="lg:flex-1 text-3xl lg:text-4xl text-gray-700 font-black tracking-tight">
             vshn.in
           </h1>
-          <p className="text-4xl lg:text-5xl lg:leading-tight font-black bg-clip-text bg-gradient-to-r text-transparent from-orange-500 to-orange-300 tracking-tight">
+          <p className="text-4xl lg:text-5xl font-black bg-clip-text bg-gradient-to-r text-transparent from-orange-500 to-orange-300 tracking-tight !leading-tight">
             Shorten your URLs
           </p>
         </header>
