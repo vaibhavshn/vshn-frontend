@@ -20,9 +20,10 @@ const Login = () => {
 
   return (
     <div className="space-y-6">
-      <h3 className="text-3xl text-gray-700 font-bold">Login</h3>
+      <h3 className="text-3xl text-gray-700 font-light">Login</h3>
       <form onSubmit={handleSubmit} className="flex flex-col mt-4 space-y-4">
         <TextField
+          type="email"
           name="email"
           label="Email"
           placeholder="Email"
@@ -38,8 +39,10 @@ const Login = () => {
           value={form.password}
           onChange={handleChange}
           required={true}
+          pattern={/^.{6,}/}
+          validationMessage="Password should atleast have 6 characters."
         />
-        <button className="flex items-center justify-center h-12 space-x-2 bg-white border-2 border-gray-200 rounded-md text-orange-500 font-bold shadow-sm transition focus:outline-none focus:border-orange-500">
+        <button className="flex items-center justify-center h-12 space-x-2 bg-white border-2 border-gray-200 rounded-md text-orange-500 font-bold shadow-sm transition focus:outline-none focus:border-orange-500 hover:border-orange-200">
           <span>Login</span>
           <ChevronRightIcon className="w-4 h-4" />
         </button>

@@ -5,3 +5,22 @@
 body {
   @apply antialiased bg-white;
 }
+
+/* Custom colors for nprogress */
+
+:root {
+  --nprogress-color: rgb(234, 88, 12);
+}
+
+#nprogress .bar {
+  background: var(--nprogress-color) !important;
+}
+
+#nprogress .peg {
+  box-shadow: 0 0 10px var(--nprogress-color), 0 0 5px var(--nprogress-color) !important;
+}
+
+#nprogress .spinner-icon {
+  border-top-color: var(--nprogress-color) !important;
+  border-left-color: var(--nprogress-color) !important;
+}

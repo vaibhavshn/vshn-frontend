@@ -1,4 +1,4 @@
-import { ChangeEventHandler } from 'react';
+import { ChangeEventHandler, useState } from 'react';
 
 interface Props {
   name: string;
@@ -8,7 +8,17 @@ interface Props {
   onChange: ChangeEventHandler<HTMLInputElement>;
   type?: string;
   required?: boolean;
+  pattern?: RegExp;
+  validationMessage?: string;
 }
+
+/**
+ * Remove first and last '/' for input tag.
+ */
+const parsePattern = (pattern: RegExp) => {
+  const patternStr = pattern.toString();
+  return patternStr.substr(1, patternStr.length - 2);
+};
 
 const TextField = ({
   name,
@@ -18,7 +28,10 @@ const TextField = ({
   value,
   required,
   onChange,
+  pattern,
+  validationMessage,
 }: Props) => {
+  const [valid, setValid] = useState<boolean>(true);
   return (
     <div className="flex flex-col space-y-1">
       <label htmlFor="" className="text-gray-500">
@@ -30,9 +43,24 @@ const TextField = ({
         placeholder={placeholder}
         className="h-12 border-2 border-gray-200 rounded-md transition focus:border-gray-600 focus:ring-gray-600"
         value={value}
-        onChange={onChange}
+        onChange={(e) => {
+          onChange(e);
+          if (pattern && pattern.test(e.target.value)) {
+            setValid(true);
+          }
+        }}
+        onBlur={(e) => {
+          if (pattern && !pattern.test(e.target.value)) {
+            setValid(false);
+          } else {
+            setValid(true);
+          }
+        }}
         required={required ?? false}
+        title={validationMessage}
+        pattern={pattern ? parsePattern(pattern) : undefined}
       />
+      {!valid && <p className="text-sm text-red-500">{validationMessage}</p>}
     </div>
   );
 };
