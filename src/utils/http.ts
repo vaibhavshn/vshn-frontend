@@ -46,3 +46,12 @@ export const addLink = (accessToken: string, form: any) => {
     body: JSON.stringify(form),
   });
 };
+
+export const fetchLinks = (accessToken: string, page: number = 1) => {
+  return fetch(`${API_HOST}/link?page=${page}`, {
+    method: 'GET',
+    headers: {
+      Authorization: `Bearer ${accessToken}`,
+    },
+  });
+};
