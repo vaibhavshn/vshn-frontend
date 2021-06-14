@@ -8,3 +8,8 @@ export interface RegisterForm {
   email: string;
   password: string;
 }
+
+export interface AddLinkForm {
+  hash?: string;
+  url: string;
+}

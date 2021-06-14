@@ -1,18 +1,36 @@
+import { useEffect } from 'react';
 import Head from 'next/head';
+import dynamic from 'next/dynamic';
 import { motion } from 'framer-motion';
 
 import LandingPage from '@/components/home/LandingPage';
-import useAuth from '@/hooks/auth';
+import { useUserStore } from '@/hooks/useUserStore';
+import { useRouter } from 'next/router';
 
-export default function Home() {
-  const { user, token, updateToken } = useAuth();
+const Home = () => {
+  const user = useUserStore((state) => state.user);
+  const router = useRouter();
+
+  useEffect(() => {
+    router.prefetch('/dashboard');
+  }, []);
+
+  useEffect(() => {
+    if (user) {
+      router.push('/dashboard');
+    }
+  }, [user]);
+
+  if (user) {
+    return <div>Logging you in...</div>;
+  }
 
   return (
     <div>
       <Head>
         <title>vshn.in - Shorten your URLs</title>
       </Head>
-      {!token && (
+      {!user && (
         <motion.main
           initial={{ y: 60, opacity: 0.4 }}
           animate={{ y: 0, opacity: 1 }}
@@ -23,4 +41,6 @@ export default function Home() {
       )}
     </div>
   );
-}
+};
+
+export default dynamic(() => Promise.resolve(Home), { ssr: false });

@@ -7,8 +7,10 @@ import useForm from '@/hooks/form';
 import { RegisterForm } from '@/types/forms';
 import { register } from '@/utils/http';
 import { RegisterResponse } from '@/types/responses';
+import { useUserStore } from '@/hooks/useUserStore';
 
 const Register = () => {
+  const setToken = useUserStore((state) => state.setToken);
   const [form, handleChange] = useForm<RegisterForm>({
     name: '',
     email: '',
@@ -21,8 +23,8 @@ const Register = () => {
       if (res.status === 200) {
         const data: RegisterResponse = await res.json();
         const token: string = data.accessToken;
-        localStorage.setItem('accessToken', token);
-        window.location.reload();
+        alert('User registered, logging you in...');
+        setToken(token);
       } else if (res.status === 409) {
         alert('The email address is already in use.');
       } else {

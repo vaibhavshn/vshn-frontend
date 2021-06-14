@@ -1,4 +1,5 @@
-import { RegisterForm, LoginForm } from '@/types/forms';
+import { useUserStore } from '@/hooks/useUserStore';
+import { RegisterForm, LoginForm, AddLinkForm } from '@/types/forms';
 
 const API_HOST: string =
   process.env.NODE_ENV === 'production'
@@ -28,6 +29,18 @@ export const register = (form: RegisterForm) => {
   return fetch(`${API_HOST}/auth/register`, {
     method: 'POST',
     headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(form),
+  });
+};
+
+export const addLink = (accessToken: string, form: any) => {
+  console.log(form);
+  return fetch(`${API_HOST}/link`, {
+    method: 'PUT',
+    headers: {
+      Authorization: `Bearer ${accessToken}`,
       'Content-Type': 'application/json',
     },
     body: JSON.stringify(form),

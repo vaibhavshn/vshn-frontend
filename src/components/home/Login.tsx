@@ -9,6 +9,7 @@ import { logIn } from '@/utils/http';
 
 import { LoginForm } from '@/types/forms';
 import { LogInResponse } from '@/types/responses';
+import { useUserStore } from '@/hooks/useUserStore';
 
 enum LoginStates {
   idle,
@@ -17,7 +18,8 @@ enum LoginStates {
 }
 
 const Login = () => {
-  const [form, handleChange] = useForm<LoginForm>({ email: '', password: '' });
+  const setToken = useUserStore((state) => state.setToken);
+  const { form, formChange } = useForm<LoginForm>({ email: '', password: '' });
   const [loginState, setLoginState] = useState<LoginStates>(LoginStates.idle);
 
   const handleSubmit = (e: FormEvent) => {
@@ -27,11 +29,9 @@ const Login = () => {
         if (res.status === 200) {
           const data: LogInResponse = await res.json();
           const token = data.accessToken;
-
-          localStorage.setItem('accessToken', token);
           setLoginState(LoginStates.loggedIn);
           setTimeout(() => {
-            window.location.reload();
+            setToken(token);
           }, 1000);
         } else {
           setLoginState(LoginStates.invalid);
@@ -53,7 +53,7 @@ const Login = () => {
           label="Email"
           placeholder="Email"
           value={form.email}
-          onChange={handleChange}
+          onChange={formChange}
           required={true}
         />
         <TextField
@@ -62,7 +62,7 @@ const Login = () => {
           type="password"
           placeholder="Password"
           value={form.password}
-          onChange={handleChange}
+          onChange={formChange}
           required={true}
           pattern={/^.{4,}/}
           validationMessage="Password should atleast have 4 characters."

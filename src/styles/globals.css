@@ -6,6 +6,10 @@ body {
   @apply antialiased bg-white;
 }
 
+.gold-gradient {
+  @apply bg-gradient-to-br from-orange-200 to-yellow-200;
+}
+
 /* Custom colors for nprogress */
 
 :root {

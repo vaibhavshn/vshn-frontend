@@ -34,7 +34,7 @@ const TextField = ({
   const [valid, setValid] = useState<boolean>(true);
   return (
     <div className="flex flex-col space-y-1">
-      <label htmlFor="" className="text-gray-500">
+      <label htmlFor="" className="text-gray-500 text-sm">
         {label}
       </label>
       <input
