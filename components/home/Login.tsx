@@ -1,4 +1,6 @@
-import { FormEvent } from 'react';
+import { FormEvent, Fragment, useEffect, useState } from 'react';
+import Link from 'next/link';
+import { Dialog, Transition } from '@headlessui/react';
 import { ChevronRightIcon } from '@heroicons/react/outline';
 
 import TextField from '@/components/TextField';
@@ -8,8 +10,15 @@ import { logIn } from '@/utils/http';
 import { LoginForm } from '@/types/forms';
 import { LogInResponse } from '@/types/responses';
 
+enum LoginStates {
+  idle,
+  loggedIn,
+  invalid,
+}
+
 const Login = () => {
   const [form, handleChange] = useForm<LoginForm>({ email: '', password: '' });
+  const [loginState, setLoginState] = useState<LoginStates>(LoginStates.idle);
 
   const handleSubmit = (e: FormEvent) => {
     if (e) e.preventDefault();
@@ -18,13 +27,17 @@ const Login = () => {
         if (res.status === 200) {
           const data: LogInResponse = await res.json();
           const token = data.accessToken;
+
           localStorage.setItem('accessToken', token);
-          window.location.reload();
+          setLoginState(LoginStates.loggedIn);
+          setTimeout(() => {
+            window.location.reload();
+          }, 1000);
         } else {
-          alert('Invalid login details');
+          setLoginState(LoginStates.invalid);
         }
       })
-      .catch((error: Error) => {
+      .catch(() => {
         alert('Unknown error');
       });
     return false;
@@ -59,6 +72,67 @@ const Login = () => {
           <ChevronRightIcon className="w-4 h-4" />
         </button>
       </form>
+
+      <Transition appear show={loginState !== LoginStates.idle} as={Fragment}>
+        <Dialog
+          as="div"
+          onClose={() => setLoginState(LoginStates.idle)}
+          className="fixed w-full z-10 inset-0 overflow-y-auto"
+        >
+          <Transition.Child
+            as={Fragment}
+            enter="ease-out duration-300"
+            enterFrom="opacity-0"
+            enterTo="opacity-100"
+            leave="ease-in duration-200"
+            leaveFrom="opacity-100"
+            leaveTo="opacity-0"
+          >
+            <div className="flex items-center justify-center min-h-screen w-full max-w-md p-4 mx-auto">
+              <Dialog.Overlay className="fixed z-0 inset-0 bg-black bg-opacity-10" />
+
+              {loginState === LoginStates.loggedIn && (
+                <div className="z-10 w-full bg-white p-4 rounded-md space-y-4 shadow-xl">
+                  <div className="space-y-2">
+                    <Dialog.Title className="text-lg">Logged In</Dialog.Title>
+                    <Dialog.Description className="text-gray-700">
+                      You are being logged in...
+                    </Dialog.Description>
+                  </div>
+                  <div>
+                    <Link href="/dashboard">
+                      <button className="block ml-auto text-orange-500 focus:outline-none">
+                        Go to Dashboard
+                      </button>
+                    </Link>
+                  </div>
+                </div>
+              )}
+
+              {loginState === LoginStates.invalid && (
+                <div className="z-10 w-full bg-white p-4 rounded-md space-y-4 shadow-xl">
+                  <div className="space-y-2">
+                    <Dialog.Title className="text-lg">
+                      Invalid Details
+                    </Dialog.Title>
+                    <Dialog.Description className="text-gray-700">
+                      Please try again...
+                    </Dialog.Description>
+                  </div>
+                  <div>
+                    <button
+                      onClick={() => setLoginState(LoginStates.idle)}
+                      className="block ml-auto text-gray-500 focus:outline-none"
+                    >
+                      Close
+                    </button>
+                  </div>
+                </div>
+              )}
+            </div>
+          </Transition.Child>
+        </Dialog>
+      </Transition>
     </div>
   );
 };

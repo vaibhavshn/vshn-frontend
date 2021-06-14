@@ -2,11 +2,8 @@ import { useEffect, useState } from 'react';
 import parseToken from '@/utils/parseToken';
 import { verifyToken } from '@/utils/http';
 
-// null  - Not authenticatied
-// false - Loading state
-// string authentication token exists
-const useAuth = () => {
-  const [token, setToken] = useState<string | null | false>(false);
+const useAuth = (redirect: boolean = true) => {
+  const [token, setToken] = useState<string | null>(null);
   const [user, setUser] = useState<Record<string, any> | null>(null);
 
   useEffect(() => {
@@ -19,15 +16,18 @@ const useAuth = () => {
             const userData = parseToken(data);
             setUser(userData);
             setToken(data);
-            window.location.href = '/dashboard';
+            if (redirect) window.location.href = '/dashboard';
           } else {
             setToken(null);
+            if (!redirect) window.location.href = '/';
           }
         })
         .catch((_) => {
+          if (!redirect) window.location.href = '/';
           setToken(null);
         });
     } else {
+      if (!redirect) window.location.href = '/';
       setToken(null);
     }
   }, []);
