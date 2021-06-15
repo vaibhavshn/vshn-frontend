@@ -3,3 +3,17 @@ export interface User {
   name: string;
   email: string;
 }
+
+export interface LinkData {
+  url: string;
+  createdAt: string;
+  uniqueViews: number;
+  totalViews: number;
+  browsers: Record<string, number>;
+  os: Record<string, number>;
+}
+
+export interface LinkStore {
+  loading: boolean;
+  data?: LinkData;
+}

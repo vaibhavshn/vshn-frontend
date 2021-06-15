@@ -7,12 +7,19 @@ interface Stats {
 }
 
 export const TotalStats = () => {
+  const setToken = useUserStore((state) => state.setToken);
   const accessToken = useUserStore((state) => state.accessToken);
   const [data, setData] = useState<Stats | null>(null);
 
   useEffect(() => {
     getTotalStats(accessToken).then(async (res: Response) => {
-      setData(await res.json());
+      if (res.status === 200) {
+        setData(await res.json());
+      } else if (res.status === 401) {
+        setToken('');
+      } else {
+        console.log('Error while fetching totalStats', await res.text());
+      }
     });
   }, []);
 

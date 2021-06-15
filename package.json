@@ -10,16 +10,21 @@
   "dependencies": {
     "@headlessui/react": "^1.2.0",
     "@heroicons/react": "^1.0.1",
+    "formik": "^2.2.9",
     "framer-motion": "^4.1.17",
+    "isomorphic-fetch": "^3.0.0",
     "lodash": "^4.17.21",
     "next": "10.2.3",
     "nprogress": "^0.2.0",
     "react": "17.0.2",
     "react-dom": "17.0.2",
+    "recharts": "^2.0.9",
     "zustand": "^3.5.2"
   },
   "devDependencies": {
     "@tailwindcss/forms": "^0.3.3",
+    "@tailwindcss/typography": "^0.4.1",
+    "@types/isomorphic-fetch": "^0.0.35",
     "@types/lodash": "^4.14.170",
     "@types/nprogress": "^0.2.0",
     "@types/react": "17.0.11",

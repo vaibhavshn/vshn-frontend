@@ -5,6 +5,7 @@ import {
   PlusIcon,
   ChevronLeftIcon,
   ChevronRightIcon,
+  CollectionIcon,
 } from '@heroicons/react/outline';
 
 import { LinkCreator } from './LinkCreator';
@@ -105,7 +106,12 @@ export const Links = () => {
             <LinkCreator
               onAdd={(link: LinkData) => {
                 const links: LinkData[] = [link, ...data.links];
-                setData(Object.assign({}, data, { links }));
+                console.log(data);
+                if (data.pages === 0) {
+                  setData(
+                    Object.assign({}, data, { links, page: 1, pages: 1 })
+                  );
+                } else setData(Object.assign({}, data, { links }));
               }}
             />
           </motion.div>
@@ -116,43 +122,53 @@ export const Links = () => {
           animate={{ y: 0, opacity: 1 }}
         >
           <div className="flex flex-col space-y-3 mt-4">
+            {data.links.length === 0 && (
+              <div className="flex flex-col space-y-2 my-16 text-center items-center">
+                <CollectionIcon className="h-24 text-orange-200" />
+                <div className="text-sm text-gray-700">
+                  Create your first link by clicking "New" above!
+                </div>
+              </div>
+            )}
             {data.links.map((link) => (
               <LinkCard link={link} key={link.hash} />
             ))}
           </div>
-          <div
-            className={`flex items-center justify-between mt-6 text-sm ${
-              data.page === 1 && !data.hasNextPage ? 'justify-center' : ''
-            }`}
-          >
-            {data.page > 1 && (
-              <button
-                onClick={() => prevPage()}
-                className="flex items-center px-4 py-2 bg-white text-orange-700 border border-gray-400 rounded-md"
-              >
-                <ChevronLeftIcon
-                  className="w-3 h-3 -ml-2 mr-2"
-                  aria-hidden="true"
-                />
-                Prev
-              </button>
-            )}
-            <span className="text-gray-600">
-              Page {data.page} of {data.pages}
-            </span>
-            {data.hasNextPage && (
-              <button
-                onClick={() => nextPage()}
-                className="flex items-center px-4 py-2 bg-white text-orange-700 border border-gray-400 rounded-md disabled:text-gray-600 disabled:bg-gray-100"
-              >
-                Next
-                <ChevronRightIcon
-                  className="w-3 h-3 -mr-2 ml-2"
-                  aria-hidden="true"
-                />
-              </button>
-            )}
-          </div>
+          {data.links.length > 0 && (
+            <div
+              className={`flex items-center justify-between mt-6 text-sm ${
+                data.page === 1 && !data.hasNextPage ? 'justify-center' : ''
+              }`}
+            >
+              {data.page > 1 && (
+                <button
+                  onClick={() => prevPage()}
+                  className="flex items-center px-4 py-2 bg-white text-orange-700 border border-gray-400 rounded-md"
+                >
+                  <ChevronLeftIcon
+                    className="w-3 h-3 -ml-2 mr-2"
+                    aria-hidden="true"
+                  />
+                  Prev
+                </button>
+              )}
+              <span className="text-gray-600">
+                Page {data.page} of {data.pages}
+              </span>
+              {data.hasNextPage && (
+                <button
+                  onClick={() => nextPage()}
+                  className="flex items-center px-4 py-2 bg-white text-orange-700 border border-gray-400 rounded-md disabled:text-gray-600 disabled:bg-gray-100"
+                >
+                  Next
+                  <ChevronRightIcon
+                    className="w-3 h-3 -mr-2 ml-2"
+                    aria-hidden="true"
+                  />
+                </button>
+              )}
+            </div>
+          )}
         </motion.div>
       </AnimateSharedLayout>
     </div>
