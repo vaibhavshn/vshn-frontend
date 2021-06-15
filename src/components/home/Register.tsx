@@ -11,7 +11,7 @@ import { useUserStore } from '@/hooks/useUserStore';
 
 const Register = () => {
   const setToken = useUserStore((state) => state.setToken);
-  const [form, handleChange] = useForm<RegisterForm>({
+  const { form, formChange } = useForm<RegisterForm>({
     name: '',
     email: '',
     password: '',
@@ -43,7 +43,7 @@ const Register = () => {
           label="Name"
           placeholder="Name"
           value={form.name}
-          onChange={handleChange}
+          onChange={formChange}
           required={true}
         />
         <TextField
@@ -51,7 +51,7 @@ const Register = () => {
           label="Email"
           placeholder="Email"
           value={form.email}
-          onChange={handleChange}
+          onChange={formChange}
           required={true}
         />
         <TextField
@@ -60,7 +60,7 @@ const Register = () => {
           type="password"
           placeholder="Password"
           value={form.password}
-          onChange={handleChange}
+          onChange={formChange}
           required={true}
           pattern={/^.{4,}/}
           validationMessage="Password should atleast have 4 characters."

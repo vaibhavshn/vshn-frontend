@@ -10,7 +10,6 @@ import {
 import { LinkCreator } from './LinkCreator';
 import { LinkCard, LinkData } from './LinkCard';
 import { fetchLinks } from '@/utils/http';
-import { useRouter } from 'next/router';
 import { useUserStore } from '@/hooks/useUserStore';
 
 interface Links {
@@ -32,9 +31,7 @@ const useLinks = () => {
     loadPage();
   }, []);
 
-  const loadPage = (direction: number = 1) => {
-    const page: number = data && data.page ? data.page + direction : 1;
-
+  const loadPage = (page: number = 1) => {
     if (page < 1) {
       return false;
     }
@@ -57,6 +54,7 @@ const useLinks = () => {
         alert('Error while fetching links');
       });
   };
+
   return { data, loadPage, setData };
 };
 
@@ -64,30 +62,21 @@ export const Links = () => {
   const [linkCreatorVisible, setLinkCreatorVisible] = useState<boolean>(false);
   const { data, setData, loadPage } = useLinks();
 
-  // const [data, setData] = useState<Links>({
-  //   links: [
-  //     {
-  //       hash: 'updated',
-  //       url: 'https://vaibhavshinde.com',
-  //     },
-  //     {
-  //       hash: '5c0b74',
-  //       url: 'https://example.com/',
-  //     },
-  //     {
-  //       hash: 'be0de3',
-  //       url: 'https://example.com/',
-  //     },
-  //   ],
-  //   hasNextPage: false,
-  //   page: 1,
-  //   total: 3,
-  //   pages: 1,
-  // });
-
   if (!data) {
     return <div>Loading link...</div>;
   }
+
+  const prevPage = () => {
+    if (data.page > 1) {
+      loadPage(data.page - 1);
+    }
+  };
+
+  const nextPage = () => {
+    if (data.page < data.pages) {
+      loadPage(data.page + 1);
+    }
+  };
 
   return (
     <div className="w-full max-w-sm mx-auto space-y-5">
@@ -138,7 +127,7 @@ export const Links = () => {
           >
             {data.page > 1 && (
               <button
-                onClick={() => loadPage(-1)}
+                onClick={() => prevPage()}
                 className="flex items-center px-4 py-2 bg-white text-orange-700 border border-gray-400 rounded-md"
               >
                 <ChevronLeftIcon
@@ -153,7 +142,7 @@ export const Links = () => {
             </span>
             {data.hasNextPage && (
               <button
-                onClick={() => loadPage()}
+                onClick={() => nextPage()}
                 className="flex items-center px-4 py-2 bg-white text-orange-700 border border-gray-400 rounded-md disabled:text-gray-600 disabled:bg-gray-100"
               >
                 Next

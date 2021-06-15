@@ -55,3 +55,12 @@ export const fetchLinks = (accessToken: string, page: number = 1) => {
     },
   });
 };
+
+export const getTotalStats = (accessToken: string) => {
+  return fetch(`${API_HOST}/link/stats`, {
+    method: 'GET',
+    headers: {
+      Authorization: `Bearer ${accessToken}`,
+    },
+  });
+};
