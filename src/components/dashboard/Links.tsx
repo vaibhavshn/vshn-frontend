@@ -106,7 +106,6 @@ export const Links = () => {
             <LinkCreator
               onAdd={(link: LinkData) => {
                 const links: LinkData[] = [link, ...data.links];
-                console.log(data);
                 if (data.pages === 0) {
                   setData(
                     Object.assign({}, data, { links, page: 1, pages: 1 })

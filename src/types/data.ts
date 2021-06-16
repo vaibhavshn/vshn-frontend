@@ -11,6 +11,7 @@ export interface LinkData {
   totalViews: number;
   browsers: Record<string, number>;
   os: Record<string, number>;
+  locations: Record<string, number>;
 }
 
 export interface LinkStore {

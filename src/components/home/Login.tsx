@@ -1,10 +1,10 @@
-import { FormEvent, Fragment, useEffect, useState } from 'react';
+import { FormEvent, Fragment, useState } from 'react';
 import Link from 'next/link';
 import { Dialog, Transition } from '@headlessui/react';
 import { ChevronRightIcon } from '@heroicons/react/outline';
 
 import TextField from '@/components/TextField';
-import useForm from '@/hooks/form';
+import useForm from '@/hooks/useForm';
 import { logIn } from '@/utils/http';
 
 import { LoginForm } from '@/types/forms';

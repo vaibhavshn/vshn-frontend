@@ -5,8 +5,9 @@ interface Props {
   data: Record<string, any>[];
 }
 
+const COLORS: string[] = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042'];
+
 export const MyPieChart = ({ data, label }: Props) => {
-  const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042'];
   return (
     <div className="flex flex-col items-center">
       <PieChart width={200} height={200}>

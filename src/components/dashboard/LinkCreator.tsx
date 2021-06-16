@@ -1,15 +1,14 @@
 import { FormEvent, useState } from 'react';
 import { motion } from 'framer-motion';
-import { Switch } from '@headlessui/react';
 import { PlusIcon } from '@heroicons/react/outline';
 
-import useForm from '@/hooks/form';
-import TextField from '../TextField';
-
-import { AddLinkForm } from '@/types/forms';
-import { addLink } from '@/utils/http';
+import useForm from '@/hooks/useForm';
 import { useUserStore } from '@/hooks/useUserStore';
+import TextField from '@/components/TextField';
 import { LinkData } from './LinkCard';
+
+import { addLink } from '@/utils/http';
+import { AddLinkForm } from '@/types/forms';
 
 interface Props {
   onAdd: (form: LinkData) => void;
@@ -25,7 +24,6 @@ export const LinkCreator = ({ onAdd }: Props) => {
   const [isCustomHash, setIsCustomHash] = useState<boolean>(false);
 
   const handleSubmit = (e: FormEvent) => {
-    console.log('submitting');
     if (e) e.preventDefault();
 
     let _form: AddLinkForm;
@@ -48,7 +46,6 @@ export const LinkCreator = ({ onAdd }: Props) => {
       } else if (res.status === 409) {
         alert('The link you entered is already taken.');
       } else {
-        console.log(res.status, await res.text());
         alert('Unknown error, see console for error message');
       }
     });

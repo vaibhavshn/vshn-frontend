@@ -2,7 +2,7 @@ import { FormEvent } from 'react';
 import { ChevronRightIcon } from '@heroicons/react/outline';
 
 import TextField from '@/components/TextField';
-import useForm from '@/hooks/form';
+import useForm from '@/hooks/useForm';
 
 import { RegisterForm } from '@/types/forms';
 import { register } from '@/utils/http';

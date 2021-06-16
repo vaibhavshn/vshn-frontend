@@ -33,14 +33,13 @@ const LinkViewer = () => {
     );
   }
 
-  console.log(linkData);
-
   if (
     !hash ||
     linkData.loading === true ||
     !linkData.data ||
     !('browsers' in linkData.data) ||
-    !('os' in linkData.data)
+    !('os' in linkData.data) ||
+    !('locations' in linkData.data)
   ) {
     return <div>Loading...</div>;
   }
@@ -59,6 +58,14 @@ const LinkViewer = () => {
       value: count,
     };
   });
+  const locations = Object.entries(linkData.data.locations).map(
+    ([location, count]) => {
+      return {
+        name: location,
+        value: count,
+      };
+    }
+  );
 
   return (
     <div className="w-full max-w-5xl mx-auto p-6">
@@ -91,6 +98,9 @@ const LinkViewer = () => {
             <MyPieChart data={browsers} label="Browsers" />
           )}
           {Object.keys(os).length > 0 && <MyPieChart data={os} label="OS" />}
+          {Object.keys(locations).length > 0 && (
+            <MyPieChart data={locations} label="Locations" />
+          )}
         </div>
       </div>
     </div>
